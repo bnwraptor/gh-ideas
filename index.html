@@ -94,14 +94,10 @@
 
         <div class="add-form">
             <h2>Add New Idea</h2>
-            <p style="margin-bottom: 15px; color: #8b949e; font-size: 0.9em;">
-                Enter the subreddit and Reddit thread ID (e.g., for reddit.com/r/Entrepreneur/comments/1rwrhuf/..., use <b>Entrepreneur</b> and <b>1rwrhuf</b>)
+            <p style="color: #8b949e; font-size: 0.9em;">
+                To add new ideas, edit index.html to add entries to the ideas list, then run:
             </p>
-            <form id="addForm">
-                <input type="text" id="subreddit" placeholder="subreddit (e.g., Entrepreneur)" required>
-                <input type="text" id="threadId" placeholder="thread ID (e.g., 1rwrhuf)" required>
-                <button type="submit">Fetch & Add</button>
-            </form>
+            <pre style="background: #0d1117; padding: 10px; border-radius: 6px; margin-top: 10px; overflow-x: auto;"><code>./fetch_idea.sh &lt;subreddit&gt; &lt;thread_id&gt;</code></pre>
         </div>
 
         <div class="ideas-grid" id="ideasList">
@@ -142,14 +138,6 @@
                 </div>
             `).join('');
         }
-
-        document.getElementById('addForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const subreddit = document.getElementById('subreddit').value;
-            const threadId = document.getElementById('threadId').value;
-            window.location.href = `fetch_idea.sh?subreddit=${subreddit}&threadId=${threadId}`;
-            alert('Note: To add new ideas, run: ./fetch_idea.sh ' + subreddit + ' ' + threadId);
-        });
 
         renderIdeas();
     </script>

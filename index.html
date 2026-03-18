@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reddit Business Ideas</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid #30363d;
+            margin-bottom: 30px;
+        }
+        h1 { color: #58a6ff; font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: #8b949e; font-size: 1.1em; }
+        .add-form {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #30363d;
+        }
+        .add-form h2 { margin-bottom: 15px; color: #58a6ff; }
+        .add-form input {
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            color: #c9d1d9;
+        }
+        .add-form button {
+            padding: 10px 20px;
+            background: #238636;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .add-form button:hover { background: #2ea043; }
+        .ideas-grid {
+            display: grid;
+            gap: 20px;
+        }
+        .idea-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .idea-card:hover {
+            transform: translateY(-2px);
+            border-color: #58a6ff;
+        }
+        .idea-card h3 { margin-bottom: 10px; }
+        .idea-card h3 a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        .idea-card h3 a:hover { text-decoration: underline; }
+        .meta {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 10px;
+        }
+        .preview {
+            color: #c9d1d9;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .score { color: #f0883e; font-weight: bold; }
+        .no-ideas { text-align: center; padding: 40px; color: #8b949e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💡 Reddit Business Ideas</h1>
+            <p class="subtitle">A collection of business ideas and lessons from Reddit</p>
+        </header>
+
+        <div class="add-form">
+            <h2>Add New Idea</h2>
+            <p style="margin-bottom: 15px; color: #8b949e; font-size: 0.9em;">
+                Enter the subreddit and Reddit thread ID (e.g., for reddit.com/r/Entrepreneur/comments/1rwrhuf/..., use <b>Entrepreneur</b> and <b>1rwrhuf</b>)
+            </p>
+            <form id="addForm">
+                <input type="text" id="subreddit" placeholder="subreddit (e.g., Entrepreneur)" required>
+                <input type="text" id="threadId" placeholder="thread ID (e.g., 1rwrhuf)" required>
+                <button type="submit">Fetch & Add</button>
+            </form>
+        </div>
+
+        <div class="ideas-grid" id="ideasList">
+            <!-- Ideas will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        const ideasDir = 'ideas';
+        
+        // List of ideas (in production, this could be generated from the directory)
+        const ideas = [
+            {
+                subreddit: 'Entrepreneur',
+                threadId: '1rwrhuf',
+                title: "We're making money in the wedding industry and here's what nobody told us",
+                author: 'puppyqueen52',
+                score: 279,
+                preview: 'My co-founder and I launched a wedding tech product 3 months ago. We\'re not getting rich but we\'re getting paid, and we learned a LOT...'
+            }
+        ];
+
+        function renderIdeas() {
+            const container = document.getElementById('ideasList');
+            
+            if (ideas.length === 0) {
+                container.innerHTML = '<div class="no-ideas">No ideas yet. Add your first one above!</div>';
+                return;
+            }
+
+            container.innerHTML = ideas.map(idea => `
+                <div class="idea-card">
+                    <h3><a href="${ideasDir}/${idea.subreddit}_${idea.threadId}.md">${idea.title}</a></h3>
+                    <div class="meta">
+                        r/${idea.subreddit} • u/${idea.author} • <span class="score">▲ ${idea.score}</span>
+                    </div>
+                    <p class="preview">${idea.preview}</p>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('addForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const subreddit = document.getElementById('subreddit').value;
+            const threadId = document.getElementById('threadId').value;
+            window.location.href = `fetch_idea.sh?subreddit=${subreddit}&threadId=${threadId}`;
+            alert('Note: To add new ideas, run: ./fetch_idea.sh ' + subreddit + ' ' + threadId);
+        });
+
+        renderIdeas();
+    </script>
+</body>
+</html>
